@@ -115,6 +115,10 @@ export class Claims {
     return this.addClaim('national_card_id')
   }
 
+  public bankAccount(): Claim {
+    return this.addClaim('bank_account')
+  }
+
   private addClaim(claimName: string): Claim {
     const claim = new Claim(claimName)
     const existingClaimIndex = this._claims.findIndex(cl => cl.claimName === claimName)

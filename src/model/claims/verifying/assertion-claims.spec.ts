@@ -1,9 +1,11 @@
-import { IAL } from '../ial'
+import { Constants } from '../../../test-resources/constants'
+import { IAL } from '../enums/ial'
+import { Account } from './account'
 import { Address } from './address'
 import { AssertionClaims } from './assertion-claims'
+import { Balance } from '../enums/balance'
+import { Identifier } from '../enums/identifier'
 import { Operator } from './operator'
-import { Balance } from './balance'
-import { Constants } from '../../../test-resources/constants'
 
 let claims: AssertionClaims
 
@@ -572,13 +574,44 @@ describe('assertion claims', () => {
           }])
       })
     })
-  })
-})
 
-function newProperty(_propertyName: string, _operand: (string | number), _operator: Operator): { _propertyName: string; _operand: (string | number); _operator: string } {
-  return {
-    _propertyName,
-    _operand,
-    _operator
+    describe('bank_account', () => {
+      describe('withIdentifier', () => {
+        it('should add bank account with identification if not already present', () => {
+          claims.bankAccount()
+            .withIdentifier(Identifier.SOME)
+            .withAssertion(Account.identification().eq('124039503031'))
+
+          expect(claims.claims).toHaveLength(1)
+          expect(claims.claims).toMatchObject([
+            {
+              _claimName: 'bank_account',
+              _identifier: 'some',
+              _properties: [newProperty('identification', '124039503031', Operator.EQUAL)]
+            }])
+        })
+
+        it('should add bank account with type if not already present', () => {
+          claims.bankAccount()
+            .withIdentifier(Identifier.NONE)
+            .withAssertion(Account.type().eq('UK.SortCodeAccountNumber'))
+          expect(claims.claims).toHaveLength(1)
+          expect(claims.claims).toMatchObject([
+            {
+              _claimName: 'bank_account',
+              _identifier: 'none',
+              _properties: [newProperty('type', 'UK.SortCodeAccountNumber', Operator.EQUAL)]
+            }])
+        })
+      })
+    })
+  })
+
+  function newProperty(_propertyName: string, _operand: (string | number), _operator: Operator): { _propertyName: string; _operand: (string | number); _operator: string } {
+    return {
+      _propertyName,
+      _operand,
+      _operator
+    }
   }
-}
+})

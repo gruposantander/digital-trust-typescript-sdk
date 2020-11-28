@@ -1,4 +1,4 @@
-import { IAL } from '../ial'
+import { IAL } from '../enums/ial'
 
 export class AssertionClaim {
   private readonly _claimName: string

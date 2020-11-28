@@ -1,6 +1,6 @@
 {
   "name": "@gruposantander/rp-client-typescript",
-  "version": "0.4.1",
+  "version": "0.5.0",
   "description": "",
   "main": "lib/api.js",
   "types": "lib/api.d.ts",

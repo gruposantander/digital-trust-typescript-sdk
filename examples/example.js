@@ -1,4 +1,4 @@
-const { Claims, AssertionClaims, Address, Balance } = require('@gruposantander/rp-client-typescript').Model
+const { Claims, AssertionClaims, Address, Balance, Account, Identifier } = require('@gruposantander/rp-client-typescript').Model
 const { VerifiedIdClient, InitiateAuthorizeRequestBuilder, TokenRequestBuilder } = require('@gruposantander/rp-client-typescript').Client
 
 const resolve = require('path').resolve
@@ -8,9 +8,14 @@ const wellKnownUri = 'https://op.iamid.io/.well-known/openid-configuration';
 const claims = new Claims()
 claims.email().withEssential(true).withPurpose('email purpose')
 claims.givenName().withIAL(2)
+claims.bankAccount().withPurpose('Please give it to us so we can identify you')
 claims.lastYearMoneyIn().withPurpose('Last year money in purpose')
 
 const assertionClaims = new AssertionClaims()
+assertionClaims.bankAccount()
+  .withIdentifier(Identifier.SOME)
+  .withAssertion(Account.type().eq('UK.SortCodeAccountNumber'))
+  .withAssertion(Account.identification().eq('09012700047186'))
 assertionClaims.age().gt(21).withPurpose('age purpose')
 assertionClaims.address()
   .withAssertion(Address.postalCode().eq('MK9 1BB'))
@@ -19,7 +24,6 @@ assertionClaims.address()
 
 assertionClaims.lastYearMoneyIn().withPurpose('Last year money in purpose')
   .withAssertion(Balance.amount().gt(200))
-
 
 // tokenExample()
 doInitAuthorize()

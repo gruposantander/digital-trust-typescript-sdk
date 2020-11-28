@@ -4,6 +4,7 @@ import { AssertionClaimSimple } from '../model/claims/verifying/assertion-claim-
 import { InitiateAuthorizeRequest } from '../model/initiate-authorize-request'
 import { AssertionClaims } from '../model/claims/verifying/assertion-claims'
 import { Claims } from '../model/claims/sharing/claims'
+import { AssertionClaimIdentifier } from '../model/claims/verifying/assertion-claim-identifier'
 
 export default function toJSON(request: InitiateAuthorizeRequest): {} {
   const idToken = prepareSharingClaims(request.claims)
@@ -42,6 +43,14 @@ function prepareVerifyingClaims(assertionClaims: AssertionClaims) {
         prepareAssertionForComplexClaim(claim, assertion)
         assertion = { props: assertion }
         break
+      case 'AssertionClaimIdentifier':
+        if ((claim as AssertionClaimIdentifier).identifier) {
+          prepareAssertionForIdentifierClaim(claim, assertion)
+        } else {
+          prepareAssertionForComplexClaim(claim, assertion)
+        }
+        assertion = { props: assertion }
+        break
       case 'AssertionClaimSimple':
       case 'AssertionClaimComparator':
         prepareAssertionForSimpleClaim(claim, assertion)
@@ -65,6 +74,19 @@ function prepareAssertionForComplexClaim(claim: AssertionClaim, assertion: any) 
     const internalAssertion = {}
     internalAssertion[property.operator] = property.operand
     assertion[property.propertyName] = internalAssertion
+  })
+}
+
+function prepareAssertionForIdentifierClaim(claim: AssertionClaim, assertion: any) {
+  const identifierClaim = claim as AssertionClaimIdentifier
+  const internalAssertion: any = {}
+  internalAssertion[identifierClaim.identifier] = { props: {} }
+
+  identifierClaim.properties.forEach(property => {
+    const subInternalAssertion = { [property.operator]: property.operand }
+
+    internalAssertion[identifierClaim.identifier].props[property.propertyName] = subInternalAssertion
+    assertion.identifiers = internalAssertion
   })
 }
 

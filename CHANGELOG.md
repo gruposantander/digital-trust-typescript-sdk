@@ -1,20 +1,31 @@
-# Changelog 
-### 0.4.1
+# Changelog
+
+## 0.5.0
+
+* Added ability for identifier
+* Added `bank_account` claim
+* Added `Identifier` enum
+
+## 0.4.1
+
 Added external publish details for github package
 
-### 0.4.0
+## 0.4.0
+
 * Assertion language has removed all usages of `$`, now the syntax is:
-  * eq 
-  * gt 
-  * gte 
+  * eq
+  * gt
+  * gte
   * lt
-  * lte 
+  * lte
 * Complex claims now contain a `props` field inside the claim, which contains the properties relating to the actual assertions being made. There are no changes in usage for a developer 
 
-### 0.3.1
+## 0.3.1
+
 * Downgraded TypeScript to v3.5.3
 
-#### 0.3.0
+### 0.3.0
+
 * Adding the following claims:
   * gender
   * country_of_birth
@@ -38,10 +49,12 @@ Added external publish details for github package
   * national_card_id
 * Renaming `.equal` to `.eq`
 
-#### 0.2.1
+### 0.2.1
+
 * Fixing bug that didn't allow more than one sharing claim at a time
 
-#### 0.2.0
+### 0.2.0
+
 * First MVP, support for the following claims (sharing & verifying):
   * phone_number
   * email
@@ -51,4 +64,3 @@ Added external publish details for github package
   * age
   * total_balance
   * address
-

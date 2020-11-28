@@ -108,6 +108,7 @@ sharingClaims.averageMonthlyMoneyIn()
 sharingClaims.passportId()
 sharingClaims.drivingLicenseId()
 sharingClaims.nationalCardId()
+sharingClaims.bankAccount()
 ```
 
 For each claim, a specific value _purpose_, _ial_ and/or _essential_ can be specified:
@@ -137,11 +138,19 @@ There are three types of assertions in this SDK: _simple_, _comparative_ and _co
  * *Complex claims*: they include different properties, that can be individually asserted, for example:
     ```js
     assertionClaims.totalBalance()
-        .withAssertion(Balance.currency().equal(Currency.getInstance("GBP")))
+        .withAssertion(Balance.currency().eq(Currency.getInstance("GBP")))
         .withAssertion(Balance.amount().gt(BigDecimal.valueOf(99.99)))
     ```
    which translates into ``Verify that the balance currency is equal to GBP and the amount is greater than 99.99``. 
    Depending on the individual claim, the property can either support only ``.eq`` or the entire set of comparisons 
+ * *Identifier claims*: they include claims where you are asserting over an array of elements. In this instance, you can use the Identifiers of `every`, `some` and `none`. This has to added before making assertions, and currently only refers to the bankAccount claim:
+    ```js
+    assertionClaims.bankAccount()
+        .withIdentifier(Identifier.SOME)
+        .withAssertion(Account.identification().eq("045364575025984")
+        .withAssertion(Account.type().eq("UK.SortCodeAccountNumber"))
+    ```
+  which translates into ``Verify that at least one of the bankAccount details has the properties of  an identification of 045364575025984, and type of UK.SortCodeAccountNumber``. 
 
 Similarly to sharing claims, _purpose_, _ial_ and/or _essential_ can be attached to verifying claims:
 ```js
@@ -151,16 +160,18 @@ assertionClaims.address()
     .withPurpose("This is why RP is verifying your address")
 ```
 
-To keep the API simple and concise, ``Balance`` and ``Address`` helpers have been created with the following methods:
+To keep the API simple and concise, ``Balance``, ``Address`` and ``Account`` helpers have been created with the following methods:
 ```js
 Balance.currency()
 Balance.amount()
-Address.formatted() 
+Address.formatted()
 Address.streetAddress()
 Address.postalCode()
 Address.locality()
 Address.region()
 Address.country()
+Account.type()
+Account.identification()
 ```
 
 ## PKCE and nonce support

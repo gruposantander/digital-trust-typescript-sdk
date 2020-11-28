@@ -1,5 +1,5 @@
 import { Claims } from './claims'
-import { IAL } from '../ial'
+import { IAL } from '../enums/ial'
 
 describe('claims', () => {
   describe('email', () => {
@@ -304,4 +304,12 @@ describe('claims', () => {
     })
   })
 
+  it('should add bank_account claim if not already present', () => {
+    const claims = new Claims()
+    claims.bankAccount()
+    expect(claims.claims).toHaveLength(1)
+    expect(claims.claims[0]).toMatchObject({
+      claimName: 'bank_account',
+    })
+  })
 })

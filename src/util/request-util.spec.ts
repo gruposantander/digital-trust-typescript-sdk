@@ -1,9 +1,8 @@
 import { Claims } from '../model/claims/sharing/claims'
 import { AssertionClaims } from '../model/claims/verifying/assertion-claims'
 import { InitiateAuthorizeRequestBuilder } from '../model/initiate-authorize-requestBuilder'
-import { Balance } from '../model/claims/verifying/balance'
-
 import toJSON from './request-util'
+import { Balance } from '../model/claims/enums/balance'
 
 const claims: Claims = new Claims()
 const assertionClaims: AssertionClaims = new AssertionClaims()
