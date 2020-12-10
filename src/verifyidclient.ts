@@ -44,9 +44,9 @@ export class VerifiedIdClient {
     this.helper = helper
   }
 
-  public static async createInstance(param: { [key: string]: any }): Promise<VerifiedIdClient> {
+  public static async createInstance(param: { [key: string]: any }, jwkAsObject?: boolean ): Promise<VerifiedIdClient> {
     const wellKnownURI = param.wellKnownURI
-    const privateJWK = await this.extractKey(param.privateJWK)
+    const privateJWK = await this.extractKey(param.privateJWK, jwkAsObject)
     const algorithm = param.algorithm ? param.algorithm : 'RS256'
     const clientId = param.clientId
     const httpClient = param.httpClient ? param.httpClient : HttpClientAxios.createInstance()
@@ -63,11 +63,12 @@ export class VerifiedIdClient {
     return client
   }
 
-  private static async extractKey(privateJWK: string): Promise<JWK.Key> {
+  // @TODO: Move to a utility like file/lib
+  public static async extractKey(privateJWK: string, isBase64?: boolean): Promise<JWK.Key> {
     if (!privateJWK) {
       return null
     }
-    return await extractJWKFromString(require(privateJWK))
+    return await extractJWKFromString(isBase64 ? Buffer.from(privateJWK, 'base64').toString() : require(privateJWK))
   }
 
   public setUpClient(): Promise<void> {
