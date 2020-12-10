@@ -14,7 +14,7 @@ import _ from 'lodash'
 
 describe('VerifiedIdClient', () => {
   describe('constructor', () => {
-    describe('should succed if all mandatory parameters are passed', () => {
+    describe('should succeed if all mandatory parameters are passed', () => {
       it('algorithm not passed', async () => {
         const data = await VerifiedIdClient.createInstance({
           wellKnownURI: 'well',
@@ -57,6 +57,20 @@ describe('VerifiedIdClient', () => {
         privateJWK: './test-resources/private-jwk.json',
       })).rejects.toEqual('clientId must be declared')
     })
+
+    it('should load a privateJWK from a file path', async () => {
+      const key = await VerifiedIdClient.extractKey('./test-resources/private-jwk.json')
+      // @ts-ignore
+      expect(key.kid).toEqual('test-key')
+    })
+
+    it('should load a privateJWK from a base64 string', async () => {
+      const key = await VerifiedIdClient.extractKey(Constants.privateJWT, true)
+      // @ts-ignore
+      expect(key.kid).toEqual('test-key')
+    })
+
+
   })
   describe('method: ', () => {
     let requestHelperMock: RequestHelper
