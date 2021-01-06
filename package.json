@@ -39,7 +39,7 @@
     "@types/nanoid": "^2.1.0",
     "@types/jwt-decode": "^2.2.1",
     "@types/node-jose": "^1.1.5",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "base64url": "^3.0.1",
     "nanoid": "^2.1.11",
     "jwt-decode": "^2.2.0",
